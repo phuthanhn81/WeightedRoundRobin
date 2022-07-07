@@ -56,7 +56,7 @@ namespace WRR
                     dic[data.Email].Add(item);
                 }
 
-                Thread.Sleep(500);
+                //Thread.Sleep(500);
             }
 
             var result = new StringBuilder();
