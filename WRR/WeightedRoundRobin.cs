@@ -16,7 +16,9 @@ namespace WRR
         {
             available = Users.Count(); // 4
             totalWeight = Users.Sum(n => n.Weight);
-            i = -1;
+            i = available;
+
+
 
             foreach (User user in Users)
             {
@@ -40,7 +42,7 @@ namespace WRR
                         new User()
                         {
                             Email = "B",
-                            Weight = 4
+                            Weight = 8
                         },
                         new User()
                         {
@@ -60,15 +62,24 @@ namespace WRR
 
         public User GetUser()
         {
-            totalTask = 16;
+            if (totalTask % totalWeight == 0)
+            {
+                foreach (User user in Users)
+                {
+                    user.Task = 0;
+                }
+                i = available;
+                totalTask = 0;
+            }
+            totalTask++;
             if (totalTask <= totalWeight)
             {
                 while (true)
                 {
-                    i++;
-                    if (i == available)
+                    i--;
+                    if (i == -1)
                     {
-                        i = 0;
+                        i = available - 1;
                     }
                     if (Users[i].Task < Users[i].Weight)
                     {
