@@ -35,22 +35,22 @@ namespace WRR
                         new User()
                         {
                             Email = "A",
-                            Weight = 1
-                        },
-                        new User()
-                        {
-                            Email = "B",
-                            Weight = 1
-                        },
-                        new User()
-                        {
-                            Email = "C",
                             Weight = 2
                         },
                         new User()
                         {
-                            Email = "D",
+                            Email = "B",
                             Weight = 4
+                        },
+                        new User()
+                        {
+                            Email = "C",
+                            Weight = 1
+                        },
+                        new User()
+                        {
+                            Email = "D",
+                            Weight = 1
                         }
                     }.OrderBy(a => a.Weight).ToList();
                 }
