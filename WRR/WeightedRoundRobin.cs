@@ -10,7 +10,7 @@ namespace WRR
         private List<User> users;
         private int available { get; set; }
         private double totalWeight { get; set; }
-        private int totalTask { get; set; }
+        public int totalTask { get; set; }
         private int i { get; set; }
         public WeightedRoundRobin()
         {
