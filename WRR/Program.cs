@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace WRR
 {
@@ -11,13 +13,36 @@ namespace WRR
     {
         static void Main(string[] args)
         {
+            WeightedRoundRobin wrr = new WeightedRoundRobin();
 
-            string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"assignment_wrr_input.txt");
+            Thread t1 = new Thread(() => { One(wrr); });
+            t1.Start();
+
+            Thread t2 = new Thread(() => { Two(wrr); });
+            t2.Start();
+        }
+
+        static void Two(WeightedRoundRobin wrr)
+        {
+            for (int i = 0; i < 2; i++)
+            {
+                Thread.Sleep(7000);
+                int index = new Random().Next(0, 3);
+
+                Console.WriteLine(index);
+                wrr.totalTask--;
+                wrr.Users[index].Task--;
+            }
+        }
+
+        static void One(WeightedRoundRobin wrr)
+        {
+            string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"csv_input.txt");
             string[] file = File.ReadAllLines(path);
 
 
             Dictionary<string, List<string>> dic = new Dictionary<string, List<string>>();
-            WeightedRoundRobin wrr = new WeightedRoundRobin();
+
             foreach (var item in file)
             {
                 User data = wrr.GetUser();
@@ -30,6 +55,8 @@ namespace WRR
                 {
                     dic[data.Email].Add(item);
                 }
+
+                Thread.Sleep(500);
             }
 
             var result = new StringBuilder();
@@ -45,10 +72,7 @@ namespace WRR
                 result.AppendLine();
             }
 
-
-            File.WriteAllText(@"csv.txt", result.ToString());
-
-            Console.ReadLine();
+            File.WriteAllText(@"csv_output.txt", result.ToString());
         }
     }
 }

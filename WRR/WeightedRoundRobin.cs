@@ -9,18 +9,19 @@ namespace WRR
     {
         private List<User> users;
         private int available { get; set; }
-        private int max { get; set; }
-        private int gcd { get; set; }
-        private int cw { get; set; }
+        private double totalWeight { get; set; }
+        public int totalTask { get; set; }
         private int i { get; set; }
-
         public WeightedRoundRobin()
         {
-            i = -1; // OrderBy weight -> index smallest weight sẽ được chọn sau cùng
-            available = Users.Count();
-            max = GetMaxWeight();
-            gcd = GCD();
-            cw = 0; // index có largest weight sẽ đc chọn trước
+            available = Users.Count(); // 4
+            totalWeight = Users.Sum(n => n.Weight);
+            i = -1;
+
+            foreach (User user in Users)
+            {
+                user.PercentWeight = (user.Weight / totalWeight) * 100;
+            }
         }
 
         public List<User> Users
@@ -34,65 +35,68 @@ namespace WRR
                         new User()
                         {
                             Email = "A",
-                            Weight = 4
+                            Weight = 1
                         },
                         new User()
                         {
                             Email = "B",
-                            Weight = 2
+                            Weight = 1
                         },
                         new User()
                         {
                             Email = "C",
-                            Weight = 0
+                            Weight = 2
                         },
                         new User()
                         {
                             Email = "D",
-                            Weight = 8
+                            Weight = 4
                         }
                     }.OrderBy(a => a.Weight).ToList();
                 }
-                return users;
+                return users.Where(n => n.Weight > 0).ToList();
             }
-        }
-
-        public int GetMaxWeight()
-        {
-            return Users.OrderBy(n => n.Weight).Last().Weight;
-        }
-
-        public int GCD()
-        {
-            return Users.Select(n => n.Weight).ToList().Aggregate(GCD);
-        }
-
-        public int GCD(int a, int b)
-        {
-            return b == 0 ? a : GCD(b, a % b);
         }
 
         public User GetUser()
         {
-            while (true)
+            totalTask++;
+            if (totalTask <= totalWeight)
             {
-                i = (i + 1) % available;
-                //Console.WriteLine($"i = {i}");
-                if (i == 0)
+                while (true)
                 {
-                    cw = cw - gcd;
-                    //Console.WriteLine($"cw = {cw}");
-                    if (cw <= 0)
+                    i++;
+                    if (i == available)
                     {
-                        cw = max;
-                        //Console.WriteLine($"cw max = {cw}");
-                        if (cw == 0)
-                            return null;
+                        i = 0;
+                    }
+                    if (Users[i].Task < Users[i].Weight)
+                    {
+                        Users[i].Task++;
+                        return Users[i];
                     }
                 }
-                if (Users[i].Weight >= cw)
+            }
+            else
+            {
+                foreach (User user in Users)
                 {
-                    return Users[i];
+                    user.DynamicTasks = (totalTask * user.PercentWeight) / 100;
+                    user.DynamicTasks = Math.Round(user.DynamicTasks, MidpointRounding.AwayFromZero);
+                }
+
+                while (true)
+                {
+                    i++;
+                    if (i == available)
+                    {
+                        i = 0;
+                    }
+                    if (Users[i].Task < Users[i].DynamicTasks)
+                    {
+                        Users[i].Task++;
+                        return Users[i];
+                    }
                 }
             }
         }
