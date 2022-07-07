@@ -42,7 +42,7 @@ namespace WRR
                         new User()
                         {
                             Email = "B",
-                            Weight = 8
+                            Weight = 4
                         },
                         new User()
                         {
