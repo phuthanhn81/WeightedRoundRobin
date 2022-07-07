@@ -19,7 +19,7 @@ namespace WRR
             t1.Start();
 
             Thread t2 = new Thread(() => { Two(wrr); });
-            t2.Start();
+            //t2.Start();
         }
 
         static void Two(WeightedRoundRobin wrr)
