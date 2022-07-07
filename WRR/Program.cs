@@ -26,7 +26,7 @@ namespace WRR
         {
             for (int i = 0; i < 2; i++)
             {
-                Thread.Sleep(7000);
+                Thread.Sleep(5000);
                 int index = new Random().Next(0, 3);
 
                 Console.WriteLine(index);
@@ -56,7 +56,7 @@ namespace WRR
                     dic[data.Email].Add(item);
                 }
 
-                //Thread.Sleep(500);
+                Thread.Sleep(500);
             }
 
             var result = new StringBuilder();
