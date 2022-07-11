@@ -11,7 +11,10 @@ namespace WRR
         public double Weight { get; set; }
         public double Task { get; set; }
         public double AvailableTasks { get; set; }
-        public string DetailsTasks { get; set; }
+        public List<string> DetailsTasks { get; set; }
+        public List<string> DetailsTasksAll { get; set; }
+        public string DetailsTasksString { get; set; }
+
 
         //public double PercentWeight { get; set; }
     }

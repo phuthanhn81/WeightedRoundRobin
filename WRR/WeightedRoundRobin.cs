@@ -11,7 +11,7 @@ namespace WRR
         private List<User> users;
         public int available { get; set; }
         public double totalWeight { get; set; }
-        public int totalTask { get; set; }
+        public double totalTask { get; set; }
         public int i { get; set; }
         public WeightedRoundRobin()
         {
@@ -38,22 +38,22 @@ namespace WRR
                         new User()
                         {
                             Email = "A",
-                            Weight = 2
+                            Weight = 1
                         },
                         new User()
                         {
                             Email = "B",
-                            Weight = 4
+                            Weight = 1
                         },
                         new User()
                         {
                             Email = "C",
-                            Weight = 1
+                            Weight = 2
                         },
                         new User()
                         {
                             Email = "D",
-                            Weight = 1
+                            Weight = 4
                         }
                     }.OrderBy(a => a.Weight).ToList();
                 }
