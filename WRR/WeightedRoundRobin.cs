@@ -84,6 +84,7 @@ namespace WRR
                     if (Users[i].Task < Users[i].Weight)
                     {
                         Users[i].Task++;
+                        Users[i].AvailableTasks++;
                         return Users[i];
                     }
                 }
@@ -92,8 +93,8 @@ namespace WRR
             {
                 foreach (User user in Users)
                 {
-                    user.DynamicTasks = (totalTask * user.PercentWeight) / 100;
-                    user.DynamicTasks = Math.Round(user.DynamicTasks, MidpointRounding.AwayFromZero);
+                    user.AvailableTasks = (totalTask * user.PercentWeight) / 100;
+                    user.AvailableTasks = Math.Round(user.AvailableTasks, MidpointRounding.AwayFromZero);
                 }
 
                 while (true)
@@ -103,7 +104,7 @@ namespace WRR
                     {
                         i = 0;
                     }
-                    if (Users[i].Task < Users[i].DynamicTasks)
+                    if (Users[i].Task < Users[i].AvailableTasks)
                     {
                         Users[i].Task++;
                         return Users[i];

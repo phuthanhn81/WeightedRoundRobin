@@ -20,13 +20,16 @@ namespace WRR
 
             Thread t2 = new Thread(() => { Two(wrr); });
             //t2.Start();
+
+            Thread t3 = new Thread(() => { Three(wrr); });
+            //t3.Start();
         }
 
         static void Two(WeightedRoundRobin wrr)
         {
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < 5; i++)
             {
-                Thread.Sleep(5000);
+                Thread.Sleep(2000);
                 int index = new Random().Next(0, 3);
 
                 Console.WriteLine(index);
@@ -39,7 +42,6 @@ namespace WRR
         {
             string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"csv_input.txt");
             string[] file = File.ReadAllLines(path);
-
 
             Dictionary<string, List<string>> dic = new Dictionary<string, List<string>>();
 
@@ -73,6 +75,12 @@ namespace WRR
             }
 
             File.WriteAllText(@"csv_output.txt", result.ToString());
+        }
+
+        static void Three(WeightedRoundRobin wrr)
+        {
+            Thread.Sleep(5000);
+            int index = new Random().Next(0, 3);
         }
     }
 }
