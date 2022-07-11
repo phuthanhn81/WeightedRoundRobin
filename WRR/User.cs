@@ -9,8 +9,10 @@ namespace WRR
     {
         public string Email { get; set; }
         public double Weight { get; set; }
-        public double PercentWeight { get; set; }
         public double Task { get; set; }
         public double AvailableTasks { get; set; }
+        public string DetailsTasks { get; set; }
+
+        //public double PercentWeight { get; set; }
     }
 }

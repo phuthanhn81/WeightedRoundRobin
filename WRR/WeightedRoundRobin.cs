@@ -7,11 +7,12 @@ namespace WRR
 {
     public class WeightedRoundRobin
     {
+        private int loop;
         private List<User> users;
-        private int available { get; set; }
-        private double totalWeight { get; set; }
+        public int available { get; set; }
+        public double totalWeight { get; set; }
         public int totalTask { get; set; }
-        private int i { get; set; }
+        public int i { get; set; }
         public WeightedRoundRobin()
         {
             available = Users.Count(); // 4
@@ -22,7 +23,7 @@ namespace WRR
 
             foreach (User user in Users)
             {
-                user.PercentWeight = (user.Weight / totalWeight) * 100;
+                //user.PercentWeight = (user.Weight / totalWeight) * 100;
             }
         }
 
@@ -60,6 +61,14 @@ namespace WRR
             }
         }
 
+        public List<User> AllUsers
+        {
+            get
+            {
+                return users;
+            }
+        }
+
         public User GetUser()
         {
             if (totalTask % totalWeight == 0)
@@ -76,6 +85,11 @@ namespace WRR
             {
                 while (true)
                 {
+                    loop++;
+                    if (loop == 10)
+                    {
+                        Console.WriteLine("loop");
+                    }
                     i--;
                     if (i == -1)
                     {
@@ -85,6 +99,8 @@ namespace WRR
                     {
                         Users[i].Task++;
                         Users[i].AvailableTasks++;
+
+                        loop = 0;
                         return Users[i];
                     }
                 }
@@ -93,7 +109,7 @@ namespace WRR
             {
                 foreach (User user in Users)
                 {
-                    user.AvailableTasks = (totalTask * user.PercentWeight) / 100;
+                    //user.AvailableTasks = (totalTask * user.PercentWeight) / 100;
                     user.AvailableTasks = Math.Round(user.AvailableTasks, MidpointRounding.AwayFromZero);
                 }
 

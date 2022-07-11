@@ -11,6 +11,8 @@ namespace WRR
 {
     class Program
     {
+        static string TasksNotAssigned { get; set; }
+
         static void Main(string[] args)
         {
             WeightedRoundRobin wrr = new WeightedRoundRobin();
@@ -19,10 +21,10 @@ namespace WRR
             t1.Start();
 
             Thread t2 = new Thread(() => { Two(wrr); });
-            //t2.Start();
+            t2.Start();
 
             Thread t3 = new Thread(() => { Three(wrr); });
-            //t3.Start();
+            t3.Start();
         }
 
         static void Two(WeightedRoundRobin wrr)
@@ -47,29 +49,42 @@ namespace WRR
 
             foreach (var item in file)
             {
-                User data = wrr.GetUser();
+                User user = wrr.GetUser();
 
-                if (!dic.Keys.Contains(data.Email))
-                {
-                    dic.Add(data.Email, new List<string>() { item });
-                }
-                else
-                {
-                    dic[data.Email].Add(item);
-                }
+                user.DetailsTasks += " " + item + ",";
 
                 Thread.Sleep(500);
             }
 
             var result = new StringBuilder();
 
-            foreach (var list in dic)
+
+            if (TasksNotAssigned != null)
             {
-                string line = list.Key + ":";
-                foreach (var item in list.Value)
+                foreach (string task in TasksNotAssigned.Split(','))
                 {
-                    line += " " + item + ",";
+                    User user = wrr.GetUser();
+
+                    user.DetailsTasks += " " + task + ",";
                 }
+            }
+
+            foreach (User user in wrr.Users)
+            {
+                string line = user.Email + ":";
+
+                line += " " + user.DetailsTasks + ",";
+
+                result.AppendLine(line.TrimEnd(','));
+                result.AppendLine();
+            }
+
+            foreach (User user in wrr.AllUsers)
+            {
+                string line = user.Email + ":";
+
+                line += " " + user.DetailsTasks + ",";
+
                 result.AppendLine(line.TrimEnd(','));
                 result.AppendLine();
             }
@@ -81,6 +96,14 @@ namespace WRR
         {
             Thread.Sleep(5000);
             int index = new Random().Next(0, 3);
+            wrr.Users[index].Weight = 0;
+            wrr.Users[index].Task = 0;
+            wrr.Users[index].AvailableTasks = 0;
+
+            wrr.available = wrr.Users.Count();
+            wrr.totalWeight = wrr.Users.Sum(n => n.Weight);
+
+            TasksNotAssigned = wrr.Users[index].DetailsTasks;
         }
     }
 }
